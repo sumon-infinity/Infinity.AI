@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infinity.AI — Beyond Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --void: #03020a;
+    --deep: #070512;
+    --ink: #0e0a1f;
+    --iris: #6c3ff7;
+    --iris-glow: #8b5cf6;
+    --pulse: #a78bfa;
+    --cyan: #22d3ee;
+    --gold: #f59e0b;
+    --white: #f8f6ff;
+    --muted: rgba(248,246,255,0.45);
+    --border: rgba(108,63,247,0.25);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--iris-glow);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(108,63,247,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: all 0.18s ease;
+  }
+
+  /* Canvas background */
+  #bg-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 48px;
+    background: linear-gradient(to bottom, rgba(3,2,10,0.95), transparent);
+    backdrop-filter: blur(0px);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .logo-mark {
+    width: 36px; height: 24px;
+    position: relative;
+  }
+
+  .nav-wordmark {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -0.03em;
+    color: var(--white);
+  }
+  .nav-wordmark span { color: var(--iris-glow); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    background: var(--iris);
+    color: var(--white) !important;
+    padding: 9px 22px;
+    border-radius: 100px;
+    font-size: 14px !important;
+    font-weight: 500;
+    transition: background 0.2s, box-shadow 0.2s !important;
+  }
+  .nav-cta:hover {
+    background: var(--iris-glow) !important;
+    box-shadow: 0 0 24px rgba(139,92,246,0.5) !important;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 24px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border);
+    background: rgba(108,63,247,0.08);
+    padding: 6px 16px 6px 10px;
+    border-radius: 100px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pulse);
+    margin-bottom: 36px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .badge-dot {
+    width: 6px; height: 6px;
+    background: var(--cyan);
+    border-radius: 50%;
+    animation: blink 1.5s ease infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  /* Big infinity SVG logo */
+  .hero-infinity {
+    width: 220px;
+    margin-bottom: 32px;
+    animation: fadeUp 0.9s ease 0.1s both;
+    filter: drop-shadow(0 0 40px rgba(108,63,247,0.6));
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(52px, 9vw, 110px);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    margin-bottom: 28px;
+    animation: fadeUp 1s ease 0.2s both;
+  }
+  .hero-title .line1 { display: block; color: var(--white); }
+  .hero-title .line2 {
+    display: block;
+    background: linear-gradient(90deg, var(--iris-glow), var(--cyan), var(--pulse));
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite, fadeUp 1s ease 0.2s both;
+    background-position: 0%;
+  }
+  @keyframes shimmer { to { background-position: 200%; } }
+
+  .hero-sub {
+    max-width: 520px;
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin-bottom: 48px;
+    animation: fadeUp 1s ease 0.35s both;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    animation: fadeUp 1s ease 0.45s both;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--iris), var(--iris-glow));
+    color: var(--white);
+    padding: 14px 32px;
+    border-radius: 100px;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    text-decoration: none;
+    border: none;
+    cursor: none;
+    transition: all 0.25s;
+    box-shadow: 0 0 0 0 rgba(139,92,246,0);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 40px rgba(108,63,247,0.6);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    padding: 14px 24px;
+    border-radius: 100px;
+    font-size: 15px;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    cursor: none;
+    transition: all 0.25s;
+  }
+  .btn-ghost:hover {
+    color: var(--white);
+    border-color: rgba(108,63,247,0.6);
+    background: rgba(108,63,247,0.08);
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    animation: fadeUp 1s ease 0.7s both;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--iris-glow), transparent);
+    animation: scrollPulse 2s ease infinite;
+  }
+  @keyframes scrollPulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+  .scroll-text {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SECTION: Features */
+  .section {
+    position: relative;
+    z-index: 1;
+    padding: 120px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--iris-glow);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+
+  .section-sub {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 72px;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .feat-card {
+    background: rgba(14,10,31,0.7);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: none;
+  }
+  .feat-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top left, rgba(108,63,247,0.1), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .feat-card:hover { border-color: rgba(108,63,247,0.55); transform: translateY(-4px); }
+  .feat-card:hover::before { opacity: 1; }
+
+  .feat-icon {
+    width: 48px; height: 48px;
+    background: rgba(108,63,247,0.15);
+    border: 1px solid rgba(108,63,247,0.3);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 24px;
+  }
+
+  .feat-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+
+  .feat-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* SECTION: Chat demo */
+  .chat-demo {
+    position: relative;
+    z-index: 1;
+    padding: 80px 48px 120px;
+    max-width: 860px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .chat-window {
+    background: rgba(14,10,31,0.85);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 40px 120px rgba(0,0,0,0.6), 0 0 0 1px rgba(108,63,247,0.1);
+    margin-top: 48px;
+    text-align: left;
+  }
+
+  .chat-topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(108,63,247,0.05);
+  }
+  .chat-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .d1 { background: #ff5f57; }
+  .d2 { background: #febc2e; }
+  .d3 { background: #28c840; }
+  .chat-title {
+    margin-left: 8px;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  .chat-body {
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .chat-msg {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    animation: fadeUp 0.5s ease both;
+  }
+  .chat-msg.user { flex-direction: row-reverse; }
+
+  .msg-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .ai-avatar {
+    background: linear-gradient(135deg, var(--iris), var(--iris-glow));
+  }
+  .user-avatar {
+    background: rgba(248,246,255,0.08);
+    border: 1px solid var(--border);
+    font-size: 12px;
+  }
+
+  .msg-bubble {
+    max-width: 72%;
+    padding: 14px 18px;
+    border-radius: 18px;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .ai-bubble {
+    background: rgba(108,63,247,0.12);
+    border: 1px solid rgba(108,63,247,0.2);
+    color: var(--white);
+    border-top-left-radius: 4px;
+  }
+  .user-bubble {
+    background: rgba(248,246,255,0.06);
+    border: 1px solid rgba(248,246,255,0.08);
+    color: var(--muted);
+    border-top-right-radius: 4px;
+  }
+
+  .chat-input-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px;
+    border-top: 1px solid var(--border);
+  }
+  .chat-input {
+    flex: 1;
+    background: rgba(108,63,247,0.06);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 11px 20px;
+    font-size: 14px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .chat-input::placeholder { color: rgba(248,246,255,0.3); }
+  .chat-input:focus { border-color: rgba(108,63,247,0.6); }
+
+  .chat-send {
+    width: 40px; height: 40px;
+    background: var(--iris);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: none;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .chat-send:hover {
+    background: var(--iris-glow);
+    box-shadow: 0 0 16px rgba(139,92,246,0.5);
+  }
+
+  /* SECTION: Stats */
+  .stats-strip {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: rgba(108,63,247,0.04);
+    padding: 60px 48px;
+  }
+  .stats-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 24px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    background: linear-gradient(90deg, var(--iris-glow), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 0.03em;
+  }
+
+  /* SECTION: CTA */
+  .cta-section {
+    position: relative;
+    z-index: 1;
+    padding: 140px 48px;
+    text-align: center;
+  }
+  .cta-inner {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .cta-infinity {
+    width: 80px;
+    margin: 0 auto 32px;
+    opacity: 0.6;
+    filter: drop-shadow(0 0 20px var(--iris));
+    animation: spin3d 8s ease-in-out infinite;
+  }
+  @keyframes spin3d {
+    0%,100% { transform: rotateY(0deg); }
+    50% { transform: rotateY(180deg); }
+  }
+  .cta-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+  .cta-sub {
+    font-size: 17px;
+    color: var(--muted);
+    margin-bottom: 48px;
+    line-height: 1.6;
+  }
+  .email-form {
+    display: flex;
+    gap: 12px;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+  .email-input {
+    flex: 1;
+    background: rgba(108,63,247,0.06);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 14px 22px;
+    font-size: 14px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .email-input::placeholder { color: rgba(248,246,255,0.3); }
+  .email-input:focus { border-color: rgba(108,63,247,0.6); }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .footer-text {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .footer-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+  .footer-links a {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--white); }
+
+  /* Typing indicator */
+  .typing {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 4px 0;
+  }
+  .typing span {
+    width: 6px; height: 6px;
+    background: var(--iris-glow);
+    border-radius: 50%;
+    animation: typingBounce 1.2s ease infinite;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingBounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
+  /* Glow orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .orb1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(108,63,247,0.18) 0%, transparent 70%);
+    top: -100px; right: -150px;
+    animation: floatOrb 10s ease-in-out infinite;
+  }
+  .orb2 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(34,211,238,0.1) 0%, transparent 70%);
+    bottom: 10%; left: -100px;
+    animation: floatOrb 14s ease-in-out infinite reverse;
+  }
+  .orb3 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(245,158,11,0.06) 0%, transparent 70%);
+    top: 50%; left: 40%;
+    animation: floatOrb 12s ease-in-out infinite 3s;
+  }
+  @keyframes floatOrb {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(30px,-30px) scale(1.05); }
+    66% { transform: translate(-20px,20px) scale(0.95); }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 18px 24px; }
+    .nav-links { display: none; }
+    .section { padding: 80px 24px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .stats-inner { grid-template-columns: repeat(2,1fr); }
+    .email-form { flex-direction: column; }
+    footer { flex-direction: column; gap: 24px; text-align: center; }
+    .hero-infinity { width: 150px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Ambient background orbs -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- Animated background canvas -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <svg class="logo-mark" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15 20C15 20 20 8 30 8C37 8 40 14 40 14C40 14 43 20 50 20C57 20 60 14 60 14" stroke="url(#ng1)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M0 20C0 20 3 26 10 26C17 26 20 20 20 20C20 20 23 14 30 14C40 14 45 20 45 20C45 20 48 26 55 26" stroke="url(#ng2)" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <defs>
+        <linearGradient id="ng1" x1="15" y1="14" x2="60" y2="20" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#6c3ff7"/><stop offset="1" stop-color="#22d3ee"/>
+        </linearGradient>
+        <linearGradient id="ng2" x1="0" y1="26" x2="55" y2="20" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#22d3ee"/><stop offset="1" stop-color="#6c3ff7"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <span class="nav-wordmark">Infinity<span>.AI</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Features</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Pricing</a></li>
+    <li><a href="#">Docs</a></li>
+    <li><a href="#" class="nav-cta">Start free →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    Now in early access · Bangladesh & beyond
+  </div>
+
+  <!-- Hero infinity logo -->
+  <svg class="hero-infinity" viewBox="0 0 300 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="hg1" x1="0" y1="80" x2="300" y2="80" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#6c3ff7"/>
+        <stop offset="0.5" stop-color="#22d3ee"/>
+        <stop offset="1" stop-color="#6c3ff7"/>
+      </linearGradient>
+      <linearGradient id="hg2" x1="0" y1="80" x2="300" y2="80" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#a78bfa" stop-opacity="0.4"/>
+        <stop offset="0.5" stop-color="#67e8f9" stop-opacity="0.3"/>
+        <stop offset="1" stop-color="#a78bfa" stop-opacity="0.4"/>
+      </linearGradient>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="4" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <!-- Glow layer -->
+    <path d="M75 80 C75 40 105 20 150 20 C195 20 225 50 250 80 C225 110 195 140 150 140 C105 140 75 120 75 80 Z
+             M225 80 C225 40 195 20 150 20 C105 20 75 50 50 80 C75 110 105 140 150 140 C195 140 225 120 225 80 Z"
+          stroke="url(#hg2)" stroke-width="20" fill="none" filter="url(#glow)"/>
+    <!-- Main strokes -->
+    <path d="M75 80 C75 40 105 20 150 20 C195 20 225 50 250 80 C225 110 195 140 150 140 C105 140 75 120 75 80 Z"
+          stroke="url(#hg1)" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M225 80 C225 40 195 20 150 20 C105 20 75 50 50 80 C75 110 105 140 150 140 C195 140 225 120 225 80 Z"
+          stroke="url(#hg1)" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <!-- Center dot -->
+    <circle cx="150" cy="80" r="6" fill="url(#hg1)"/>
+    <circle cx="150" cy="80" r="12" fill="url(#hg1)" opacity="0.2"/>
+    <!-- Animated particle -->
+    <circle r="5" fill="#22d3ee" opacity="0.9">
+      <animateMotion dur="3s" repeatCount="indefinite"
+        path="M75 80 C75 40 105 20 150 20 C195 20 225 50 250 80 C225 110 195 140 150 140 C105 140 75 120 75 80 Z
+              M75 80 C75 120 105 140 150 140 C195 140 225 110 250 80 C225 50 195 20 150 20 C105 20 75 40 75 80"/>
+    </circle>
+    <circle r="3.5" fill="#a78bfa" opacity="0.8">
+      <animateMotion dur="3s" begin="1.5s" repeatCount="indefinite"
+        path="M225 80 C225 40 195 20 150 20 C105 20 75 50 50 80 C75 110 105 140 150 140 C195 140 225 120 225 80
+              M225 80 C225 120 195 140 150 140 C105 140 75 110 50 80 C75 50 105 20 150 20 C195 20 225 40 225 80"/>
+    </circle>
+  </svg>
+
+  <h1 class="hero-title">
+    <span class="line1">Intelligence</span>
+    <span class="line2">Without Limits</span>
+  </h1>
+
+  <p class="hero-sub">
+    Infinity.AI is your boundless thinking partner — reasoning, creating, and solving with you across every dimension of work and life.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#" class="btn-primary">
+      Start for free
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="#" class="btn-ghost">
+      See how it works
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M6.5 5.5l4 2.5-4 2.5V5.5z" fill="currentColor"/></svg>
+    </a>
+  </div>
+
+  <div class="hero-scroll">
+    <span class="scroll-text">Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div>
+      <div class="stat-num" data-target="2.4">0</div>
+      <div class="stat-label">Billion parameters</div>
+    </div>
+    <div>
+      <div class="stat-num" data-target="99.9">0</div>
+      <div class="stat-label">% uptime guaranteed</div>
+    </div>
+    <div>
+      <div class="stat-num" data-target="180">0</div>
+      <div class="stat-label">ms avg. response</div>
+    </div>
+    <div>
+      <div class="stat-num" data-target="50">0</div>
+      <div class="stat-label">Languages supported</div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section">
+  <div class="section-label">Capabilities</div>
+  <h2 class="section-title">Built to think<br>at every scale</h2>
+  <p class="section-sub">From a quick answer to a complex multi-step project — Infinity.AI adapts to whatever you need.</p>
+
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon">∞</div>
+      <div class="feat-title">Infinite context</div>
+      <p class="feat-desc">Remember everything across your entire session. No more repeating yourself — Infinity.AI holds your full story.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">⚡</div>
+      <div class="feat-title">Real-time reasoning</div>
+      <p class="feat-desc">Think through complex problems step by step — from coding and math to strategy and research.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🌐</div>
+      <div class="feat-title">Web-aware AI</div>
+      <p class="feat-desc">Search, summarise, and cite live information from across the internet in every response.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🎨</div>
+      <div class="feat-title">Creative studio</div>
+      <p class="feat-desc">Write, design concepts, generate ideas, and produce long-form content — all in your voice and style.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🔒</div>
+      <div class="feat-title">Private by design</div>
+      <p class="feat-desc">Your conversations are yours. End-to-end encryption and zero training on your personal data.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🇧🇩</div>
+      <div class="feat-title">Bengali-first</div>
+      <p class="feat-desc">Fluent in Bangla and built for Bangladesh — culturally aware, locally relevant, globally capable.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHAT DEMO -->
+<section class="chat-demo">
+  <div class="section-label">Live demo</div>
+  <h2 class="section-title">See the difference</h2>
+  <p class="hero-sub" style="max-width:520px;margin:0 auto;">Watch how Infinity.AI thinks — not just answers.</p>
+
+  <div class="chat-window">
+    <div class="chat-topbar">
+      <span class="chat-dot d1"></span>
+      <span class="chat-dot d2"></span>
+      <span class="chat-dot d3"></span>
+      <span class="chat-title">Infinity.AI — New conversation</span>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="chat-msg" style="animation-delay:0.2s">
+        <div class="msg-avatar user-avatar">Md</div>
+        <div class="msg-bubble user-bubble">How can AI help my food business grow faster?</div>
+      </div>
+      <div class="chat-msg" style="animation-delay:0.6s">
+        <div class="msg-avatar ai-avatar">
+          <svg width="18" height="12" viewBox="0 0 60 40" fill="none">
+            <path d="M15 20C15 20 20 8 30 8C37 8 40 14 40 14C40 14 43 20 50 20C57 20 60 14 60 14" stroke="white" stroke-width="4" stroke-linecap="round"/>
+            <path d="M0 20C0 20 3 26 10 26C17 26 20 20 20 20C20 20 23 14 30 14C40 14 45 20 45 20C45 20 48 26 55 26" stroke="white" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="msg-bubble ai-bubble">Great question! Here are 5 ways AI can accelerate your food business — specifically in Bangladesh's fast-growing F&B market:<br><br>
+          <strong style="color:var(--pulse)">1. Smart menu personalisation</strong> — AI can analyse order history to recommend dishes and upsell, increasing average order value by 20–35%.<br><br>
+          <strong style="color:var(--pulse)">2. Demand forecasting</strong> — Predict peak hours and popular items to cut food waste and optimise your kitchen prep.<br><br>
+          <strong style="color:var(--pulse)">3. Automated customer support</strong> — Handle 80% of queries (order status, reservations, complaints) instantly via chatbot.
+        </div>
+      </div>
+      <div class="chat-msg" id="typingMsg" style="display:none">
+        <div class="msg-avatar ai-avatar">
+          <svg width="18" height="12" viewBox="0 0 60 40" fill="none">
+            <path d="M15 20C15 20 20 8 30 8C37 8 40 14 40 14C40 14 43 20 50 20C57 20 60 14 60 14" stroke="white" stroke-width="4" stroke-linecap="round"/>
+            <path d="M0 20C0 20 3 26 10 26C17 26 20 20 20 20C20 20 23 14 30 14C40 14 45 20 45 20C45 20 48 26 55 26" stroke="white" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="msg-bubble ai-bubble">
+          <div class="typing"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="chat-input-bar">
+      <input class="chat-input" id="chatInput" type="text" placeholder="Ask Infinity anything..." />
+      <button class="chat-send" id="chatSend">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 3l5 5-5 5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <svg class="cta-infinity" viewBox="0 0 300 160" fill="none">
+      <defs>
+        <linearGradient id="cg1" x1="0" y1="80" x2="300" y2="80" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#6c3ff7"/><stop offset="0.5" stop-color="#22d3ee"/><stop offset="1" stop-color="#6c3ff7"/>
+        </linearGradient>
+      </defs>
+      <path d="M75 80 C75 40 105 20 150 20 C195 20 225 50 250 80 C225 110 195 140 150 140 C105 140 75 120 75 80 Z
+               M225 80 C225 40 195 20 150 20 C105 20 75 50 50 80 C75 110 105 140 150 140 C195 140 225 120 225 80 Z"
+            stroke="url(#cg1)" stroke-width="6" fill="none" stroke-linecap="round"/>
+    </svg>
+    <h2 class="cta-title">The future has<br>no ceiling.</h2>
+    <p class="cta-sub">Join thousands getting early access to Infinity.AI — intelligence that grows with you.</p>
+    <div class="email-form">
+      <input class="email-input" type="email" placeholder="your@email.com" />
+      <a href="#" class="btn-primary" style="white-space:nowrap">Get early access</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a class="footer-logo" href="#">
+    <svg width="28" height="18" viewBox="0 0 60 40" fill="none">
+      <path d="M15 20C15 20 20 8 30 8C37 8 40 14 40 14C40 14 43 20 50 20C57 20 60 14 60 14" stroke="url(#fg1)" stroke-width="4" stroke-linecap="round"/>
+      <path d="M0 20C0 20 3 26 10 26C17 26 20 20 20 20C20 20 23 14 30 14C40 14 45 20 45 20C45 20 48 26 55 26" stroke="url(#fg2)" stroke-width="4" stroke-linecap="round"/>
+      <defs>
+        <linearGradient id="fg1" x1="15" y1="14" x2="60" y2="20" gradientUnits="userSpaceOnUse"><stop stop-color="#6c3ff7"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+        <linearGradient id="fg2" x1="0" y1="26" x2="55" y2="20" gradientUnits="userSpaceOnUse"><stop stop-color="#22d3ee"/><stop offset="1" stop-color="#6c3ff7"/></linearGradient>
+      </defs>
+    </svg>
+    <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-left:6px">Infinity<span style="color:var(--iris-glow)">.AI</span></span>
+  </a>
+  <span class="footer-text">© 2025 Infinity.AI · Dhaka, Bangladesh</span>
+  <ul class="footer-links">
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Terms</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</footer>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animCursor() {
+  cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+document.querySelectorAll('a,button,.feat-card,.nav-cta').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2.5)'; ring.style.transform = 'translate(-50%,-50%) scale(1.4)'; ring.style.borderColor = 'rgba(108,63,247,0.8)'; });
+  el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.borderColor = 'rgba(108,63,247,0.5)'; });
+});
+
+// Background canvas — flowing infinity field
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [], lines = [];
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Infinity path parametric
+function infinityPoint(t, cx, cy, a, b) {
+  const s = Math.sin(t);
+  const d = 1 + Math.cos(t) * Math.cos(t);
+  return {
+    x: cx + a * Math.cos(t) / d,
+    y: cy + b * s * Math.cos(t) / d
+  };
+}
+
+// Create floating particles along infinity curves
+for (let i = 0; i < 60; i++) {
+  const cx = Math.random() * W;
+  const cy = Math.random() * H;
+  const scale = 40 + Math.random() * 120;
+  particles.push({
+    cx, cy, scale,
+    t: Math.random() * Math.PI * 2,
+    speed: (0.004 + Math.random() * 0.008) * (Math.random() > 0.5 ? 1 : -1),
+    alpha: 0.04 + Math.random() * 0.12,
+    color: Math.random() > 0.5 ? [108,63,247] : [34,211,238]
+  });
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Draw faint grid
+  ctx.strokeStyle = 'rgba(108,63,247,0.04)';
+  ctx.lineWidth = 0.5;
+  for (let x = 0; x < W; x += 80) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  for (let y = 0; y < H; y += 80) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+  particles.forEach(p => {
+    p.t += p.speed;
+    const pt = infinityPoint(p.t, p.cx, p.cy, p.scale, p.scale * 0.5);
+
+    // Draw trail
+    const [r,g,b] = p.color;
+    const grad = ctx.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, 8);
+    grad.addColorStop(0, `rgba(${r},${g},${b},${p.alpha})`);
+    grad.addColorStop(1, `rgba(${r},${g},${b},0)`);
+    ctx.beginPath();
+    ctx.arc(pt.x, pt.y, 8, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Draw infinity path outline occasionally
+    if (p.alpha > 0.08) {
+      ctx.beginPath();
+      for (let t2 = 0; t2 < Math.PI * 2; t2 += 0.05) {
+        const pp = infinityPoint(t2, p.cx, p.cy, p.scale, p.scale * 0.5);
+        t2 === 0 ? ctx.moveTo(pp.x, pp.y) : ctx.lineTo(pp.x, pp.y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = `rgba(${r},${g},${b},${p.alpha * 0.3})`;
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+    }
+  });
+
+  requestAnimationFrame(draw);
+}
+draw();
+
+// Counter animation
+function animateCounters() {
+  document.querySelectorAll('.stat-num').forEach(el => {
+    const target = parseFloat(el.dataset.target);
+    const isFloat = target % 1 !== 0;
+    let current = 0;
+    const increment = target / 60;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) { current = target; clearInterval(timer); }
+      el.textContent = isFloat ? current.toFixed(1) : Math.floor(current);
+    }, 25);
+  });
+}
+const statsEl = document.querySelector('.stats-strip');
+const observer = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) { animateCounters(); observer.disconnect(); }
+}, { threshold: 0.3 });
+observer.observe(statsEl);
+
+// Chat demo interaction
+const chatInput = document.getElementById('chatInput');
+const chatSend = document.getElementById('chatSend');
+const chatBody = document.getElementById('chatBody');
+const typingMsg = document.getElementById('typingMsg');
+
+const demoReplies = [
+  "Infinity.AI can also help you with menu pricing strategy, A/B testing your offers, and even writing your marketing copy in both English and Bangla. What aspect would you like to explore first?",
+  "Great question! With Infinity.AI integrated into your operations, you can automate customer responses, analyse sales trends, and get AI-generated insights every morning. Shall I walk you through the setup?",
+  "For a food brand in Dhaka, I'd recommend starting with WhatsApp AI integration — 87% of your customers already use it daily. Want me to outline a 30-day implementation plan?"
+];
+let replyIndex = 0;
+
+function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+  chatInput.value = '';
+
+  const userMsg = document.createElement('div');
+  userMsg.className = 'chat-msg user';
+  userMsg.innerHTML = `<div class="msg-avatar user-avatar">Md</div><div class="msg-bubble user-bubble">${text}</div>`;
+  chatBody.insertBefore(userMsg, typingMsg);
+
+  typingMsg.style.display = 'flex';
+  chatBody.scrollTop = chatBody.scrollHeight;
+
+  setTimeout(() => {
+    typingMsg.style.display = 'none';
+    const aiMsg = document.createElement('div');
+    aiMsg.className = 'chat-msg';
+    const reply = demoReplies[replyIndex % demoReplies.length]; replyIndex++;
+    aiMsg.innerHTML = `
+      <div class="msg-avatar ai-avatar">
+        <svg width="18" height="12" viewBox="0 0 60 40" fill="none">
+          <path d="M15 20C15 20 20 8 30 8C37 8 40 14 40 14C40 14 43 20 50 20C57 20 60 14 60 14" stroke="white" stroke-width="4" stroke-linecap="round"/>
+          <path d="M0 20C0 20 3 26 10 26C17 26 20 20 20 20C20 20 23 14 30 14C40 14 45 20 45 20C45 20 48 26 55 26" stroke="white" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="msg-bubble ai-bubble">${reply}</div>`;
+    chatBody.insertBefore(aiMsg, typingMsg);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }, 1800);
+}
+
+chatSend.addEventListener('click', sendMessage);
+chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
+</script>
+</body>
+</html>
